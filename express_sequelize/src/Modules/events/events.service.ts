@@ -1,4 +1,5 @@
 import Event from './entities/event.entity';
+import Workshop from './entities/workshop.entity';
 
 
 export class EventsService {
@@ -85,7 +86,17 @@ export class EventsService {
      */
 
   async getEventsWithWorkshops() {
-    throw new Error('TODO task 1');
+    try{
+      Event.findAll({
+        include: [{
+          model: Workshop,
+          required: false
+        }]
+      });
+    }
+    catch(err){
+      throw err;
+    }
   }
 
   /* TODO: complete getFutureEventWithWorkshops so that it returns events with workshops, that have not yet started
@@ -155,6 +166,21 @@ export class EventsService {
     ```
      */
   async getFutureEventWithWorkshops() {
-    throw new Error('TODO task 2');
+    // - join, whereIn, min, groupBy, havingRaw might be helpful
+    try{
+      Event.findAll({
+        include: [{
+          model: Workshop,
+          where: {
+            start: {
+              $ne: null
+            }
+          }
+        }]
+      });
+    }
+    catch(err){
+      throw err;
+    }
   }
 }

@@ -1,3 +1,4 @@
+import MenuItem from './entities/menu-item.entity';
 export class MenuItemsService {
 
   /* TODO: complete getMenuItems so that it returns a nested menu structure
@@ -76,6 +77,33 @@ export class MenuItemsService {
   */
 
   async getMenuItems() {
-    throw new Error('TODO in task 3');
+    try{
+        let menus = await MenuItem.findAll({});
+        if(menus && menus.length > 0){
+            let rootMenu: any = menus.forEach((menu)=>{
+                if(menu.parentId === null){
+                    return menu;
+                }
+            })
+            // I've to run this recursively but not able to figure out as of now.
+            async function recursionMenu(key: string, obj,  menusArray){
+                rootMenu[key] = menus.forEach(m=>{
+                    if(m.parentId === rootMenu['id']){
+                        return m;
+                    }else{
+                        recursionMenu(key, m, menusArray);
+                    }
+                })
+            }
+
+            //recursionMenu('children', )
+            
+
+            return rootMenu;
+        }
+      }
+      catch(err){
+        throw err;
+      }
   }
 }
